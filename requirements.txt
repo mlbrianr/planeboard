@@ -1,0 +1,8 @@
+couchbase==4.0.2
+flake8==4.0.1
+mccabe==0.6.1
+numpy==1.23.0
+pycodestyle==2.8.0
+pyflakes==2.4.0
+pyModeS==2.11
+pyzmq==23.2.0
