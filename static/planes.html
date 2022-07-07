@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Planes</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=PT+Sans&display=swap" rel="stylesheet">
+<style>
+td {
+	font-family: 'PT Mono', sans-serif;
+}
+th {
+	font-family: 'PT Sans', sans-serif;
+	text-align: left;
+}
+.green {
+	color: green;
+	font-weight: bold;
+}
+.yellow {
+	color: orange;
+	font-weight: bold;
+}
+</style>
+
+</head>
+
+<body>
+    <div id="mypanel"></div>
+
+    <script>
+	setInterval(function() {
+        $.getJSON('http://192.168.1.250:5000', function(data) {
+
+        let cur_ts = Math.floor(Date.now() / 1000);
+        let a = "<table>";
+			    a += "<tr><th>Callsign</th><th>Position</th><th>Velocity</th><th>Angle</th><th>Distance</th><th>Altitude</th><th>Category</th><th>Selected Alt</th><th>Rollovers</th></tr>";
+
+        for (let x in data) {
+			    if (cur_ts - data[x]['t']['ts'] < 60) { a += "<tr class='green'>"; } 
+			    else if (cur_ts - data[x]['t']['ts'] < 300) { a += "<tr class='yellow'>"; }
+			    else { a += "<tr>"; }
+
+			    const tags = ['callsign', 'pos', 'vel', 'angle', 'distance', 'alt', 'cat_desc', 'selected_alt', 'rollovers']
+
+			    for (let tag in tags) {
+						a += "<td>" + data[x]['t'][tags[tag]] + "</td>";
+			    }
+
+			    a += "</tr>";
+//			    a += "<td>" + data[x]['t']['callsign'] + "</td><td>" + data[x]['t']['pos'] + "</td><td>" + data[x]['t']['vel'] + "</td><td>" + data[x]['t']['distance'] + "</td><td>" + data[x]['t']['alt'] + "</td><td>" + data[x]['t']['cat_desc'] + "</td><td>"+data[x]['t']['selected_alt'] + "</td></tr>";
+        }
+
+        a += "</table>"
+			    document.getElementById("mypanel").innerHTML = a; })
+	}, 1000);
+
+    </script>
+</body>
+</html>
